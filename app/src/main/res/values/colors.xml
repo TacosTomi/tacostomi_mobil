@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Los colores de los tacos, chiavo -->
+    <color name="navy">#0D1127</color>
+    <color name="periwinkle">#8B8FC8</color>
+    <color name="periwinkle_claro">#E3E4F4</color>
+    <color name="fondo">#F4F4FA</color>
+    <color name="blanco">#FFFFFF</color>
+    <color name="gris_texto">#6B6E85</color>
+    <color name="rojo">#D9534F</color>
+    <color name="verde">#3E9D5C</color>
+</resources>
