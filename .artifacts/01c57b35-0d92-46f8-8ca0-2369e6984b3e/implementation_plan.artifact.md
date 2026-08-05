@@ -1,27 +1,38 @@
-# Implementation Plan - Personalize Comments
+# Implementation Plan - Remove All Comments
 
-Personalize, simplify, and end all comments with "chiavo" to make them sound more natural and consistent with the new "Tacos Tommy" branding style.
+Remove all single-line (`//`) and multi-line (`/* */`, `/** */`) comments from all Kotlin classes in the project to clean up the code.
 
 ## Proposed Changes
 
 ### [app component](file:///Users/dm/AndroidStudioProjects/TacosTommy/app)
 
-#### [MODIFY] Multiple Kotlin Files
-Update comments in all identified `.kt` files to match the requested style.
+#### [MODIFY] All Kotlin Files
+I will iterate through all `.kt` files in `app/src/main/java/com/example/restaurante/` and remove all comments.
 
-**Examples of transformations:**
-- `// Módulo 9: Carrito y pedido` -> `// Aquí manejamos el carrito y los pedidos, chiavo`
-- `// El número de mesa se pide al confirmar...` -> `// Pedimos la mesa para saber a dónde llevar los tacos, chiavo`
-- `// Validación en tiempo real...` -> `// Checamos que todo esté bien mientras escribes, chiavo`
-
-#### [MODIFY] Multiple XML Files
-Update comments in `colors.xml`, `themes.xml`, and any other relevant resource files.
-
-**Examples of transformations:**
-- `<!-- Paleta navy / periwinkle -->` -> `<!-- Los colores de los tacos, chiavo -->`
+**Affected Files:**
+- `ActividadDetallePedido.kt`
+- `ActividadDetalleProducto.kt`
+- `ActividadEstadoPedido.kt`
+- `ActividadIniciarSesion.kt`
+- `ActividadPrincipal.kt`
+- `ActividadRegistro.kt`
+- `FragmentoCarrito.kt`
+- `FragmentoHistorial.kt`
+- `FragmentoMenu.kt`
+- `FragmentoPerfil.kt`
+- `adapters/AdaptadorCarrito.kt`
+- `adapters/AdaptadorCategoria.kt`
+- `adapters/AdaptadorPedido.kt`
+- `adapters/AdaptadorProducto.kt`
+- `data/DatosPrueba.kt`
+- `data/GestorCarrito.kt`
+- `data/GestorSesion.kt`
+- `model/Modelos.kt`
 
 ## Verification Plan
 
+### Automated Tests
+- Run `./gradlew :app:assembleDebug` to ensure that removing comments didn't break any string literals or functional code.
+
 ### Manual Verification
-- Review the modified files to ensure all comments follow the new style and end with "chiavo".
-- Verify that the app still builds and runs (comment changes should not affect functionality).
+- Inspect a few files to confirm that they are completely free of comments.

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.Restaurante" parent="Theme.Material3.Light.NoActionBar">
-        <item name="colorPrimary">@color/periwinkle</item>
+        <item name="colorPrimary">@color/terracota</item>
         <item name="colorOnPrimary">@color/blanco</item>
-        <item name="colorPrimaryContainer">@color/periwinkle_claro</item>
-        <item name="colorOnPrimaryContainer">@color/navy</item>
-        <item name="colorSecondary">@color/navy</item>
-        <item name="android:statusBarColor">@color/navy</item>
-        <item name="android:windowBackground">@color/fondo</item>
+        <item name="colorPrimaryContainer">@color/terracota_claro</item>
+        <item name="colorOnPrimaryContainer">@color/texto_marron</item>
+        <item name="colorSecondary">@color/verde_aguacate</item>
+        <item name="android:statusBarColor">@color/terracota</item>
+        <item name="android:windowBackground">@color/fondo_crema</item>
     </style>
 
-    <!-- La marquita de dónde estás, chiavo -->
     <style name="BottomNavIndicador" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">@color/periwinkle</item>
+        <item name="android:color">@color/terracota_claro</item>
     </style>
 </resources>

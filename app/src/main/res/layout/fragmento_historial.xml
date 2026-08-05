@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mis pedidos 🧾"
-        android:textColor="@color/navy"
+        android:textColor="@color/texto_marron"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Del más reciente al más antiguo"
-        android:textColor="@color/gris_texto"
+        android:textColor="@color/texto_secundario"
         android:textSize="13sp" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -34,6 +34,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="Aún no tienes pedidos.\n¡Haz tu primera orden! 🍽️"
-        android:textColor="@color/gris_texto"
+        android:textColor="@color/texto_secundario"
         android:visibility="gone" />
 </LinearLayout>

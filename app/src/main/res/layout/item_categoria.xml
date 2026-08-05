@@ -9,7 +9,7 @@
     app:cardBackgroundColor="@color/blanco"
     app:cardCornerRadius="20dp"
     app:cardElevation="0dp"
-    app:strokeColor="@color/periwinkle_claro"
+    app:strokeColor="@color/terracota_claro"
     app:strokeWidth="1dp">
 
     <TextView
@@ -19,7 +19,7 @@
         android:paddingHorizontal="16dp"
         android:paddingVertical="10dp"
         android:text="Categoría"
-        android:textColor="@color/navy"
+        android:textColor="@color/texto_marron"
         android:textSize="14sp"
         android:textStyle="bold" />
 </com.google.android.material.card.MaterialCardView>

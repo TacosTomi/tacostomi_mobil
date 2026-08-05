@@ -10,7 +10,7 @@
         android:theme="@style/Theme.Restaurante">
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".ActividadIniciarSesion"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,10 +18,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".RegisterActivity" android:exported="false" />
-        <activity android:name=".MainActivity" android:exported="false" />
-        <activity android:name=".ProductDetailActivity" android:exported="false" />
-        <activity android:name=".OrderStatusActivity" android:exported="false" />
-        <activity android:name=".OrderDetailActivity" android:exported="false" />
+        <activity android:name=".ActividadRegistro" android:exported="false" />
+        <activity android:name=".ActividadPrincipal" android:exported="false" />
+        <activity android:name=".ActividadDetalleProducto" android:exported="false" />
+        <activity android:name=".ActividadEstadoPedido" android:exported="false" />
+        <activity android:name=".ActividadDetallePedido" android:exported="false" />
     </application>
 </manifest>

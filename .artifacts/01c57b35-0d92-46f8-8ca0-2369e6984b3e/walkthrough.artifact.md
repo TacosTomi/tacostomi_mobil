@@ -1,28 +1,20 @@
-# Walkthrough - Personalized Comments
+# Walkthrough - Remove All Comments
 
-I have updated the comments across the entire project to match the "Tacos Tommy" branding style. All comments are now more natural, simplified, and end with the requested "chiavo".
+All comments have been removed from the Kotlin classes in the project to provide a cleaner codebase.
 
 ## Changes Made
 
-### 1. Kotlin Files Personalized
-Updated all identified comments in:
-- [CartFragment.kt](file:///Users/dm/AndroidStudioProjects/TacosTommy/app/src/main/java/com/example/restaurante/CartFragment.kt)
-- [HistoryFragment.kt](file:///Users/dm/AndroidStudioProjects/TacosTommy/app/src/main/java/com/example/restaurante/HistoryFragment.kt)
-- [LoginActivity.kt](file:///Users/dm/AndroidStudioProjects/TacosTommy/app/src/main/java/com/example/restaurante/LoginActivity.kt)
-- [MainActivity.kt](file:///Users/dm/AndroidStudioProjects/TacosTommy/app/src/main/java/com/example/restaurante/MainActivity.kt)
-- [MenuFragment.kt](file:///Users/dm/AndroidStudioProjects/TacosTommy/app/src/main/java/com/example/restaurante/MenuFragment.kt)
-- [OrderDetailActivity.kt](file:///Users/dm/AndroidStudioProjects/TacosTommy/app/src/main/java/com/example/restaurante/OrderDetailActivity.kt)
-- [OrderStatusActivity.kt](file:///Users/dm/AndroidStudioProjects/TacosTommy/app/src/main/java/com/example/restaurante/OrderStatusActivity.kt)
-- [ProductDetailActivity.kt](file:///Users/dm/AndroidStudioProjects/TacosTommy/app/src/main/java/com/example/restaurante/ProductDetailActivity.kt)
-- [ProfileFragment.kt](file:///Users/dm/AndroidStudioProjects/TacosTommy/app/src/main/java/com/example/restaurante/ProfileFragment.kt)
-- [RegisterActivity.kt](file:///Users/dm/AndroidStudioProjects/TacosTommy/app/src/main/java/com/example/restaurante/RegisterActivity.kt)
-- Adapters: `CartAdapter.kt`, `ProductAdapter.kt`.
-- Data Managers: `CartManager.kt`, `MockData.kt`, `SessionManager.kt`.
+### 1. Kotlin Files Cleaned
+Removed all `//`, `/* */`, and `/** */` comments from the following files:
+- All Activities (e.g., `ActividadPrincipal.kt`, `ActividadRegistro.kt`)
+- All Fragments (e.g., `FragmentoMenu.kt`, `FragmentoPerfil.kt`)
+- All Adapters (e.g., `AdaptadorCarrito.kt`, `AdaptadorProducto.kt`)
+- All Data Managers (e.g., `GestorCarrito.kt`, `DatosPrueba.kt`)
+- All Models (`Modelos.kt`)
 
-### 2. XML Files Personalized
-- [colors.xml](file:///Users/dm/AndroidStudioProjects/TacosTommy/app/src/main/res/values/colors.xml)
-- [themes.xml](file:///Users/dm/AndroidStudioProjects/TacosTommy/app/src/main/res/values/themes.xml)
+### 2. Line Collapsing
+Collapsed multiple consecutive empty lines that were left after comment removal to maintain a compact and readable code structure.
 
 ## Verification Results
 
-- **Gradle Build**: Successfully ran `./gradlew :app:assembleDebug`. All code is still functional, chiavo!
+- **Build**: Successfully ran `./gradlew :app:assembleDebug`. Functional code was preserved during the cleaning process.

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Los colores de los tacos, chiavo -->
-    <color name="navy">#0D1127</color>
-    <color name="periwinkle">#8B8FC8</color>
-    <color name="periwinkle_claro">#E3E4F4</color>
-    <color name="fondo">#F4F4FA</color>
+    <!-- Colores mexicanos: Terracota, Aguacate, Crema -->
+    <color name="terracota">#E24C38</color>
+    <color name="terracota_claro">#FAD9D5</color>
+    <color name="verde_aguacate">#558B2F</color>
+    <color name="fondo_crema">#FFF9F0</color>
     <color name="blanco">#FFFFFF</color>
-    <color name="gris_texto">#6B6E85</color>
-    <color name="rojo">#D9534F</color>
-    <color name="verde">#3E9D5C</color>
+    <color name="texto_marron">#4E342E</color>
+    <color name="texto_secundario">#8D6E63</color>
+    <color name="rojo">#D32F2F</color>
+    <color name="verde">#388E3C</color>
 </resources>

@@ -33,7 +33,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Nombre"
-            android:textColor="@color/navy"
+            android:textColor="@color/texto_marron"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -45,7 +45,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:text="Descripción"
-            android:textColor="@color/gris_texto"
+            android:textColor="@color/texto_secundario"
             android:textSize="12sp" />
 
         <LinearLayout
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="$0.00"
-                android:textColor="@color/navy"
+                android:textColor="@color/texto_marron"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             android:text="Nombre"
-            android:textColor="@color/navy"
+            android:textColor="@color/texto_marron"
             android:textSize="22sp"
             android:textStyle="bold" />
 
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:text="correo@ejemplo.com"
-            android:textColor="@color/gris_texto" />
+            android:textColor="@color/texto_secundario" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Resumen de actividad"
-                    android:textColor="@color/navy"
+                    android:textColor="@color/texto_marron"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -68,7 +68,7 @@
                     android:layout_marginTop="8dp"
                     android:lineSpacingExtra="6dp"
                     android:text="Pedidos realizados: 0\nÚltima visita: —"
-                    android:textColor="@color/gris_texto"
+                    android:textColor="@color/texto_secundario"
                     android:textSize="15sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -80,9 +80,9 @@
             android:layout_height="54dp"
             android:layout_marginTop="20dp"
             android:text="Editar nombre"
-            android:textColor="@color/navy"
+            android:textColor="@color/texto_marron"
             app:cornerRadius="14dp"
-            app:strokeColor="@color/periwinkle" />
+            app:strokeColor="@color/terracota" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCambiarPass"
@@ -91,9 +91,9 @@
             android:layout_height="54dp"
             android:layout_marginTop="10dp"
             android:text="Cambiar contraseña"
-            android:textColor="@color/navy"
+            android:textColor="@color/texto_marron"
             app:cornerRadius="14dp"
-            app:strokeColor="@color/periwinkle" />
+            app:strokeColor="@color/terracota" />
 
         <TextView
             android:layout_width="match_parent"
@@ -101,7 +101,7 @@
             android:layout_marginTop="12dp"
             android:gravity="center"
             android:text="El correo no puede modificarse desde la app.\nPara cambiarlo, contacta al administrador."
-            android:textColor="@color/gris_texto"
+            android:textColor="@color/texto_secundario"
             android:textSize="12sp" />
 
         <com.google.android.material.button.MaterialButton
@@ -111,8 +111,8 @@
             android:layout_height="54dp"
             android:layout_marginTop="20dp"
             android:text="Cerrar sesión"
-            android:textColor="@color/rojo"
+            android:textColor="@color/terracota"
             app:cornerRadius="14dp"
-            app:strokeColor="@color/rojo" />
+            app:strokeColor="@color/terracota" />
     </LinearLayout>
 </ScrollView>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/fondo"
+    android:background="@color/fondo_crema"
     android:fillViewport="true">
 
     <LinearLayout
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="←  Volver"
-            android:textColor="@color/periwinkle"
+            android:textColor="@color/terracota"
             android:textSize="15sp"
             android:textStyle="bold"
             android:layout_marginRight="150dp"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="Pedido #0000"
-            android:textColor="@color/navy"
+            android:textColor="@color/texto_marron"
             android:textSize="24sp"
             android:textStyle="bold"/>
 
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:text="01/01/2026 · Mesa 0"
-            android:textColor="@color/gris_texto" />
+            android:textColor="@color/texto_secundario" />
 
         <TextView
             android:id="@+id/tvEstado"
@@ -53,7 +53,7 @@
             android:paddingHorizontal="14dp"
             android:paddingVertical="6dp"
             android:text="Completado"
-            android:textColor="@color/verde"
+            android:textColor="@color/verde_aguacate"
             android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Total cobrado"
-                android:textColor="@color/gris_texto"
+                android:textColor="@color/texto_secundario"
                 android:textSize="16sp" />
 
             <TextView
@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="$0.00"
-                android:textColor="@color/navy"
+                android:textColor="@color/texto_marron"
                 android:textSize="22sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -102,7 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginTop="20dp"
-            android:backgroundTint="@color/navy"
+            android:backgroundTint="@color/texto_marron"
             android:text="Repetir este pedido"
             android:textSize="16sp"
             app:cornerRadius="14dp" />

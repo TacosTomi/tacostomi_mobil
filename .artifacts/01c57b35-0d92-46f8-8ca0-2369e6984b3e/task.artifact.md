@@ -1,20 +1,6 @@
-# Task: Personalize Comments
+# Task: Remove All Comments
 
-- [x] Update Kotlin files
-    - [x] `CartFragment.kt`
-    - [x] `HistoryFragment.kt`
-    - [x] `LoginActivity.kt`
-    - [x] `MainActivity.kt`
-    - [x] `MenuFragment.kt`
-    - [x] `OrderDetailActivity.kt`
-    - [x] `OrderStatusActivity.kt`
-    - [x] `ProductDetailActivity.kt`
-    - [x] `ProfileFragment.kt`
-    - [x] `RegisterActivity.kt`
-    - [x] `adapters/*.kt`
-    - [x] `data/*.kt`
-    - [x] `model/*.kt`
-- [x] Update XML files
-    - [x] `res/values/colors.xml`
-    - [x] `res/values/themes.xml`
-- [x] Verify build
+- [x] Identify all Kotlin files
+- [x] Remove all single-line and multi-line comments from Kotlin files
+- [x] Collapse multiple empty lines
+- [x] Verify project build

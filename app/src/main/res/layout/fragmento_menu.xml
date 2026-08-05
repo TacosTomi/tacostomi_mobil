@@ -10,15 +10,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hola"
-        android:textColor="@color/navy"
+        android:textColor="@color/texto_marron"
         android:textSize="24sp"
         android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="¿Qué se te antoja hoyn chiavo?"
-        android:textColor="@color/gris_texto"
+        android:text="¿Qué se te antoja hoy?"
+        android:textColor="@color/texto_secundario"
         android:textSize="15sp" />
 
     <EditText
@@ -27,11 +27,11 @@
         android:layout_height="52dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/bg_buscador"
-        android:hint="🔍  Buscar platillos..."
+        android:hint="Buscar platillos..."
         android:inputType="text"
         android:maxLines="1"
         android:paddingHorizontal="18dp"
-        android:textColorHint="@color/gris_texto"
+        android:textColorHint="@color/texto_secundario"
         android:textSize="15sp" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -57,6 +57,6 @@
         android:gravity="center"
         android:padding="24dp"
         android:text="No encontramos platillos con ese nombre 😔"
-        android:textColor="@color/gris_texto"
+        android:textColor="@color/texto_secundario"
         android:visibility="gone" />
 </LinearLayout>
