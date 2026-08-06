@@ -19,7 +19,10 @@
         </activity>
 
         <activity android:name=".ActividadRegistro" android:exported="false" />
-        <activity android:name=".ActividadPrincipal" android:exported="false" />
+        <activity android:name=".ActividadMenu" android:exported="false" />
+        <activity android:name=".ActividadCarrito" android:exported="false" />
+        <activity android:name=".ActividadHistorial" android:exported="false" />
+        <activity android:name=".ActividadPerfil" android:exported="false" />
         <activity android:name=".ActividadDetalleProducto" android:exported="false" />
         <activity android:name=".ActividadEstadoPedido" android:exported="false" />
         <activity android:name=".ActividadDetallePedido" android:exported="false" />
