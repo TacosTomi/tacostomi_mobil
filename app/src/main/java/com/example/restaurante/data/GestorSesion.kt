@@ -2,99 +2,88 @@ package com.example.restaurante.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import org.json.JSONArray
-import org.json.JSONObject
+import com.example.restaurante.network.RetrofitClient
+import com.example.restaurante.network.dto.LoginRequest
+
+sealed class ResultadoLogin {
+    data class Exito(val nombre: String) : ResultadoLogin()
+    data class Error(val mensaje: String) : ResultadoLogin()
+}
 
 object GestorSesion {
-    var nombre: String = "Cliente Demo"
-    var correo: String = "clientedemo@example.com"
-    var password: String = "Chemo123"
+    var id: Int = -1
+    var nombre: String = ""
+    var correo: String = ""
+    var rolId: Int = -1
+    var token: String? = null
     var sesionActiva = false
 
     private const val PREFS_NAME = "RestaurantePrefs"
-    private const val KEY_USUARIOS = "lista_usuarios"
-    private const val KEY_USUARIO_ACTIVO = "usuario_activo"
+    private const val KEY_TOKEN = "token"
+    private const val KEY_ID = "usuario_id"
+    private const val KEY_NOMBRE = "usuario_nombre"
+    private const val KEY_CORREO = "usuario_correo"
+    private const val KEY_ROL = "usuario_rol"
 
     private fun getPrefs(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 
-    private fun obtenerUsuarios(context: Context): JSONArray {
-        val prefs = getPrefs(context)
-        val jsonString = prefs.getString(KEY_USUARIOS, "[]")
-        return JSONArray(jsonString)
-    }
-
-    private fun guardarUsuarios(context: Context, usuarios: JSONArray) {
-        val prefs = getPrefs(context)
-        prefs.edit().putString(KEY_USUARIOS, usuarios.toString()).apply()
-    }
-
     fun inicializar(context: Context) {
         val prefs = getPrefs(context)
-        val activoString = prefs.getString(KEY_USUARIO_ACTIVO, null)
-        if (activoString != null) {
-            val json = JSONObject(activoString)
-            nombre = json.optString("nombre", "")
-            correo = json.optString("correo", "")
-            password = json.optString("password", "")
+        val tokenGuardado = prefs.getString(KEY_TOKEN, null)
+        if (tokenGuardado != null) {
+            token = tokenGuardado
+            id = prefs.getInt(KEY_ID, -1)
+            nombre = prefs.getString(KEY_NOMBRE, "") ?: ""
+            correo = prefs.getString(KEY_CORREO, "") ?: ""
+            rolId = prefs.getInt(KEY_ROL, -1)
             sesionActiva = true
         } else {
             sesionActiva = false
         }
     }
 
-    fun iniciarSesion(context: Context, correoIngresado: String, contrasenaIngresada: String): Boolean {
-        val usuarios = obtenerUsuarios(context)
-        for (i in 0 until usuarios.length()) {
-            val u = usuarios.getJSONObject(i)
-            if (u.optString("correo") == correoIngresado && u.optString("password") == contrasenaIngresada) {
-                nombre = u.optString("nombre")
-                correo = u.optString("correo")
-                password = u.optString("password")
+    /**
+     * Llama al endpoint real POST /login. Debe invocarse desde una corrutina
+     * (por ejemplo con lifecycleScope.launch { }), ya que hace una petición de red.
+     */
+    suspend fun iniciarSesion(context: Context, correoIngresado: String, contrasenaIngresada: String): ResultadoLogin {
+        return try {
+            val respuesta = RetrofitClient.api.login(LoginRequest(correoIngresado, contrasenaIngresada))
+
+            if (respuesta.isSuccessful && respuesta.body()?.exito == true) {
+                val data = respuesta.body()!!.data!!
+                token = data.token
+                id = data.usuario.id
+                nombre = data.usuario.nombre
+                correo = data.usuario.correo
+                rolId = data.usuario.rolId
                 sesionActiva = true
-                guardarUsuarioActivo(context, u)
-                return true
+                guardarSesion(context)
+                ResultadoLogin.Exito(nombre)
+            } else {
+                val mensaje = respuesta.body()?.mensaje ?: "Credenciales incorrectas"
+                ResultadoLogin.Error(mensaje)
             }
+        } catch (e: Exception) {
+            ResultadoLogin.Error("No se pudo conectar con el servidor: ${e.message}")
         }
-        return false
     }
 
-    fun registrar(context: Context, nombreIn: String, correoIn: String, passIn: String): Boolean {
-        val usuarios = obtenerUsuarios(context)
-        for (i in 0 until usuarios.length()) {
-            if (usuarios.getJSONObject(i).optString("correo") == correoIn) {
-                return false 
-            }
-        }
-
-        val nuevoUsuario = JSONObject().apply {
-            put("nombre", nombreIn)
-            put("correo", correoIn)
-            put("password", passIn)
-        }
-        usuarios.put(nuevoUsuario)
-        guardarUsuarios(context, usuarios)
-
-        nombre = nombreIn
-        correo = correoIn
-        password = passIn
-        sesionActiva = true
-        guardarUsuarioActivo(context, nuevoUsuario)
-        return true
-    }
-
-    private fun guardarUsuarioActivo(context: Context, usuario: JSONObject?) {
-        val prefs = getPrefs(context)
-        if (usuario != null) {
-            prefs.edit().putString(KEY_USUARIO_ACTIVO, usuario.toString()).apply()
-        } else {
-            prefs.edit().remove(KEY_USUARIO_ACTIVO).apply()
-        }
+    private fun guardarSesion(context: Context) {
+        getPrefs(context).edit()
+            .putString(KEY_TOKEN, token)
+            .putInt(KEY_ID, id)
+            .putString(KEY_NOMBRE, nombre)
+            .putString(KEY_CORREO, correo)
+            .putInt(KEY_ROL, rolId)
+            .apply()
     }
 
     fun cerrarSesion(context: Context) {
         sesionActiva = false
-        guardarUsuarioActivo(context, null)
+        token = null
+        getPrefs(context).edit().clear().apply()
     }
 }

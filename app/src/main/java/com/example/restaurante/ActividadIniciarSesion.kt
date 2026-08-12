@@ -8,8 +8,11 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.restaurante.data.GestorSesion
+import com.example.restaurante.data.ResultadoLogin
 import com.example.restaurante.databinding.ActividadIniciarSesionBinding
+import kotlinx.coroutines.launch
 
 class ActividadIniciarSesion : AppCompatActivity() {
 
@@ -17,14 +20,14 @@ class ActividadIniciarSesion : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         GestorSesion.inicializar(this)
         if (GestorSesion.sesionActiva) {
             startActivity(Intent(this, ActividadMenu::class.java))
             finish()
             return
         }
-        
+
         binding = ActividadIniciarSesionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -44,12 +47,18 @@ class ActividadIniciarSesion : AppCompatActivity() {
             } else binding.tilPassword.error = null
 
             if (valido) {
-                val exito = GestorSesion.iniciarSesion(this, correo, pass)
-                if (exito) {
-                    startActivity(Intent(this, ActividadMenu::class.java))
-                    finish()
-                } else {
-                    Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
+                binding.btnLogin.isEnabled = false
+                lifecycleScope.launch {
+                    when (val resultado = GestorSesion.iniciarSesion(this@ActividadIniciarSesion, correo, pass)) {
+                        is ResultadoLogin.Exito -> {
+                            startActivity(Intent(this@ActividadIniciarSesion, ActividadMenu::class.java))
+                            finish()
+                        }
+                        is ResultadoLogin.Error -> {
+                            binding.btnLogin.isEnabled = true
+                            Toast.makeText(this@ActividadIniciarSesion, resultado.mensaje, Toast.LENGTH_LONG).show()
+                        }
+                    }
                 }
             }
         }

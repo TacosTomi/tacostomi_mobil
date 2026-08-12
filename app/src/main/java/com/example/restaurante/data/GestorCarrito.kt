@@ -65,12 +65,15 @@ object GestorCarrito {
                     lObj.getString("notas")
                 ))
             }
+            val totalServidor = if (obj.has("totalServidor") && !obj.isNull("totalServidor"))
+                obj.getDouble("totalServidor") else null
             pedidos.add(Pedido(
                 obj.getInt("id"),
                 obj.getString("fecha"),
                 obj.getInt("mesa"),
                 lineas,
-                OrderStatus.valueOf(obj.getString("estado"))
+                OrderStatus.valueOf(obj.getString("estado")),
+                totalServidor
             ))
         }
     }
@@ -117,6 +120,7 @@ object GestorCarrito {
                 put("mesa", pedido.mesa)
                 put("estado", pedido.estado.name)
                 put("lineas", lineasArray)
+                if (pedido.totalServidor != null) put("totalServidor", pedido.totalServidor)
             }
             array.put(obj)
         }
@@ -133,6 +137,17 @@ object GestorCarrito {
 
     fun agregarPedido(context: Context, pedido: Pedido) {
         pedidos.add(0, pedido)
+        guardarPedidos(context)
+    }
+
+    /**
+     * Inserta el pedido si es nuevo, o lo reemplaza si ya existe uno con el mismo id.
+     * Se usa para reflejar el estado/total más reciente que llega del servidor,
+     * conservando las líneas (productos) que solo existen localmente.
+     */
+    fun upsertPedido(context: Context, pedido: Pedido) {
+        val idx = pedidos.indexOfFirst { it.id == pedido.id }
+        if (idx >= 0) pedidos[idx] = pedido else pedidos.add(0, pedido)
         guardarPedidos(context)
     }
 
