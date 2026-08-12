@@ -1,11 +1,10 @@
 package com.example.restaurante
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
-import com.example.restaurante.data.GestorSesion
 import com.example.restaurante.databinding.ActividadRegistroBinding
 
 class ActividadRegistro : AppCompatActivity() {
@@ -47,13 +46,15 @@ class ActividadRegistro : AppCompatActivity() {
                     pass.length >= 6 && pass == confirmar
 
             if (valido) {
-                val exito = GestorSesion.registrar(this, nombre, correo, pass)
-                if (exito) {
-                    startActivity(Intent(this, ActividadMenu::class.java))
-                    finishAffinity()
-                } else {
-                    binding.tilCorreo.error = "Este correo ya está registrado"
-                }
+                // TODO: el endpoint /crearUsuario actualmente requiere que quien lo llame
+                // ya sea un admin autenticado (auth:sanctum + rol_id === 1), por lo que un
+                // cliente nuevo no puede auto-registrarse todavía. Falta definir en el backend
+                // una ruta de registro abierta para clientes antes de conectar esta pantalla.
+                Toast.makeText(
+                    this,
+                    "El registro todavía no está disponible. Contacta al restaurante.",
+                    Toast.LENGTH_LONG
+                ).show()
             } else {
                 if (nombre.isBlank()) binding.tilNombre.error = "El nombre es obligatorio"
                 if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) binding.tilCorreo.error = "Escribe un correo válido"

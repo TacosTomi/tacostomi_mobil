@@ -28,19 +28,32 @@
             android:textColor="@color/texto_secundario"
             android:textSize="13sp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvPedidos"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="14dp"
-            android:layout_weight="1" />
+            android:layout_weight="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPedidos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ProgressBar
+                android:id="@+id/progressHistorial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tvSinPedidos"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
+            android:padding="24dp"
             android:text="Aún no tienes pedidos.\n¡Haz tu primera orden! 🍽️"
             android:textColor="@color/texto_secundario"
             android:visibility="gone" />

@@ -5,9 +5,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.restaurante.data.GestorCarrito
-import com.example.restaurante.data.DatosPrueba
+import com.example.restaurante.data.CacheMenu
 import com.example.restaurante.databinding.ActividadDetalleProductoBinding
 import java.util.Locale
+
 
 class ActividadDetalleProducto : AppCompatActivity() {
 
@@ -19,7 +20,7 @@ class ActividadDetalleProducto : AppCompatActivity() {
         binding = ActividadDetalleProductoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val producto = DatosPrueba.productoPorId(intent.getIntExtra("productoId", -1))
+        val producto = CacheMenu.productoPorId(intent.getIntExtra("productoId", -1))
         if (producto == null) { finish(); return }
 
         binding.tvEmoji.text = producto.emoji

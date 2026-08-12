@@ -43,7 +43,10 @@ data class Pedido(
     val fecha: String,
     val mesa: Int,
     val lineas: List<OrderLine>,
-    var estado: OrderStatus
+    var estado: OrderStatus,
+    // Total confirmado por el servidor. Si es null (pedidos viejos guardados
+    // localmente antes de este cambio), se calcula a partir de las líneas.
+    val totalServidor: Double? = null
 ) {
-    val total: Double get() = lineas.sumOf { it.cantidad * it.precioUnit }
+    val total: Double get() = totalServidor ?: lineas.sumOf { it.cantidad * it.precioUnit }
 }

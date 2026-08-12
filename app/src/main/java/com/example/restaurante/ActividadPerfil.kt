@@ -92,16 +92,9 @@ class ActividadPerfil : AppCompatActivity() {
             .setTitle("Cambiar contraseña")
             .setView(contenedor)
             .setPositiveButton("Guardar") { _, _ ->
-                when {
-                    etActual.text.toString() != GestorSesion.password ->
-                        Toast.makeText(this, "La contraseña actual no coincide", Toast.LENGTH_LONG).show()
-                    etNueva.text.toString().length < 6 ->
-                        Toast.makeText(this, "La nueva contraseña debe tener mínimo 6 caracteres", Toast.LENGTH_LONG).show()
-                    else -> {
-                        GestorSesion.password = etNueva.text.toString()
-                        Toast.makeText(this, "Contraseña actualizada", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                // TODO: falta un endpoint en la API (ej. PUT /usuario/password) para poder
+                // cambiar la contraseña de verdad contra el backend. Por ahora solo se avisa.
+                Toast.makeText(this, "Esta función aún no está conectada al servidor", Toast.LENGTH_LONG).show()
             }
             .setNegativeButton("Cancelar", null)
             .show()

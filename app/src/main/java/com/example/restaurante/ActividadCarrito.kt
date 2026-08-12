@@ -2,21 +2,27 @@ package com.example.restaurante
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputType
 import android.view.View
-import android.widget.EditText
-import android.widget.FrameLayout
+import android.widget.Button
+import android.widget.GridLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.restaurante.adapters.AdaptadorCarrito
-import com.example.restaurante.data.GestorCarrito
 import com.example.restaurante.data.DatosPrueba
+import com.example.restaurante.data.GestorCarrito
+import com.example.restaurante.data.GestorSesion
 import com.example.restaurante.databinding.ActividadCarritoBinding
-import com.example.restaurante.model.Pedido
 import com.example.restaurante.model.OrderLine
 import com.example.restaurante.model.OrderStatus
+import com.example.restaurante.model.Pedido
+import com.example.restaurante.network.RetrofitClient
+import com.example.restaurante.network.dto.CrearPedidoRequest
+import com.example.restaurante.network.dto.aEstado
+import com.example.restaurante.network.dto.aFechaLegible
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -25,6 +31,13 @@ class ActividadCarrito : AppCompatActivity() {
 
     private lateinit var binding: ActividadCarritoBinding
     private lateinit var adapter: AdaptadorCarrito
+
+    companion object {
+        // TODO: ajustar al id real de un mesero que exista en tu tabla `meseros`.
+        // La app todavía no tiene flujo para que el cliente elija mesero (el pedido
+        // se hace directo desde su celular), así que se asigna este por defecto.
+        private const val MESERO_ID_POR_DEFECTO = 1
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,45 +67,92 @@ class ActividadCarrito : AppCompatActivity() {
     }
 
     private fun pedirNumeroDeMesa() {
-        val input = EditText(this).apply {
-            hint = "Número de mesa"
-            inputType = InputType.TYPE_CLASS_NUMBER
-        }
-        val contenedor = FrameLayout(this).apply {
-            setPadding(48, 16, 48, 0)
-            addView(input)
-        }
-        AlertDialog.Builder(this)
-            .setTitle("Confirmar pedido")
-            .setMessage("Escribe el número de tu mesa")
-            .setView(contenedor)
-            .setPositiveButton("Enviar pedido") { _, _ ->
-                val mesa = input.text.toString().toIntOrNull()
-                if (mesa == null || mesa !in DatosPrueba.mesasValidas) {
-                    Toast.makeText(this,
-                        "Mesa inválida. Mesas registradas: 1 a ${DatosPrueba.mesasValidas.last()}",
-                        Toast.LENGTH_LONG).show()
-                } else {
-                    enviarPedido(mesa)
+        val vista = layoutInflater.inflate(R.layout.dialogo_seleccionar_mesa, null)
+        val grid = vista.findViewById<GridLayout>(R.id.gridMesas)
+
+        val dialogo = AlertDialog.Builder(this)
+            .setView(vista)
+            .setNegativeButton("Cancelar", null)
+            .create()
+
+        DatosPrueba.mesasValidas.forEach { numeroMesa ->
+            val boton = Button(this).apply {
+                text = numeroMesa.toString()
+                setBackgroundResource(R.drawable.bg_mesa)
+                setTextColor(getColor(R.color.texto_marron))
+                val params = GridLayout.LayoutParams().apply {
+                    width = 0
+                    height = GridLayout.LayoutParams.WRAP_CONTENT
+                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                    setMargins(8, 8, 8, 8)
+                }
+                layoutParams = params
+                setPadding(0, 32, 0, 32)
+                setOnClickListener {
+                    dialogo.dismiss()
+                    enviarPedido(numeroMesa)
                 }
             }
-            .setNegativeButton("Cancelar", null)
-            .show()
+            grid.addView(boton)
+        }
+
+        dialogo.show()
     }
 
     private fun enviarPedido(mesa: Int) {
-        val fecha = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(Date())
+        // Las líneas (productos) solo se guardan localmente: el backend aún no
+        // tiene tabla detalle_pedidos, así que al servidor solo le mandamos el total.
         val lineas = GestorCarrito.items.map {
             OrderLine(it.producto.id, it.producto.nombre, it.cantidad, it.producto.precio, it.notas)
         }
-        val pedido = Pedido(DatosPrueba.nuevoIdPedido(), fecha, mesa, lineas, OrderStatus.RECIBIDO)
-        GestorCarrito.agregarPedido(this, pedido)
-        GestorCarrito.limpiar(this)
-        actualizarResumen()
+        val total = GestorCarrito.total()
+        val fechaHoraServidor = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
 
-        val intent = Intent(this, ActividadEstadoPedido::class.java)
-        intent.putExtra("pedidoId", pedido.id)
-        startActivity(intent)
+        binding.btnConfirmar.isEnabled = false
+        binding.btnConfirmar.text = "Enviando..."
+
+        lifecycleScope.launch {
+            try {
+                val respuesta = RetrofitClient.api.crearPedido(
+                    CrearPedidoRequest(
+                        mesaId = mesa,
+                        clienteId = GestorSesion.id,
+                        meseroId = MESERO_ID_POR_DEFECTO,
+                        estado = OrderStatus.RECIBIDO.name,
+                        total = total,
+                        fechaHora = fechaHoraServidor
+                    )
+                )
+
+                if (respuesta.isSuccessful && respuesta.body()?.exito == true) {
+                    val dto = respuesta.body()!!.data!!
+                    val pedido = Pedido(
+                        id = dto.id,
+                        fecha = dto.fechaHora.aFechaLegible(),
+                        mesa = dto.mesaId,
+                        lineas = lineas,
+                        estado = dto.aEstado(),
+                        totalServidor = dto.total
+                    )
+                    GestorCarrito.upsertPedido(this@ActividadCarrito, pedido)
+                    GestorCarrito.limpiar(this@ActividadCarrito)
+                    actualizarResumen()
+
+                    val intent = Intent(this@ActividadCarrito, ActividadEstadoPedido::class.java)
+                    intent.putExtra("pedidoId", pedido.id)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    val mensaje = respuesta.body()?.mensaje ?: "No se pudo enviar el pedido"
+                    Toast.makeText(this@ActividadCarrito, mensaje, Toast.LENGTH_LONG).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@ActividadCarrito, "Error de conexión: ${e.message}", Toast.LENGTH_LONG).show()
+            } finally {
+                binding.btnConfirmar.isEnabled = true
+                binding.btnConfirmar.text = "Confirmar y enviar pedido"
+            }
+        }
     }
 
     private fun setupNavigation() {
