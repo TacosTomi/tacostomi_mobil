@@ -43,8 +43,12 @@ class ActividadDetalleProducto : AppCompatActivity() {
             }
         }
         binding.btnMas.setOnClickListener {
-            cantidad++
-            binding.tvCantidad.text = cantidad.toString()
+            if (cantidad < 20) {
+                cantidad++
+                binding.tvCantidad.text = cantidad.toString()
+            } else {
+                Toast.makeText(this, "Máximo 20 unidades por platillo", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.btnAgregar.setOnClickListener {
