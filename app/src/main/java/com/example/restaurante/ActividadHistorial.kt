@@ -14,8 +14,7 @@ import com.example.restaurante.data.GestorSesion
 import com.example.restaurante.databinding.ActividadHistorialBinding
 import com.example.restaurante.model.Pedido
 import com.example.restaurante.network.RetrofitClient
-import com.example.restaurante.network.dto.aEstado
-import com.example.restaurante.network.dto.aFechaLegible
+import com.example.restaurante.network.dto.aModelo
 import kotlinx.coroutines.launch
 
 class ActividadHistorial : AppCompatActivity() {
@@ -28,6 +27,7 @@ class ActividadHistorial : AppCompatActivity() {
         binding = ActividadHistorialBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        GestorCarrito.inicializar(this)
         setupNavigation()
         setupUI()
     }
@@ -74,17 +74,13 @@ class ActividadHistorial : AppCompatActivity() {
                     val pedidosServidor = respuesta.body()?.data.orEmpty().asReversed()
 
                     val pedidos = pedidosServidor.map { dto ->
-                        // Las líneas (productos) no vienen del servidor: si este pedido
-                        // se creó en este mismo dispositivo, las recuperamos de la copia local.
-                        val local = GestorCarrito.pedidos.find { it.id == dto.id }
-                        Pedido(
-                            id = dto.id,
-                            fecha = dto.fechaHora.aFechaLegible(),
-                            mesa = dto.mesaId,
-                            lineas = local?.lineas ?: emptyList(),
-                            estado = dto.aEstado(),
-                            totalServidor = dto.total
-                        )
+                        val modeloServer = dto.aModelo()
+                        if (modeloServer.lineas.isNotEmpty()) {
+                            modeloServer
+                        } else {
+                            val local = GestorCarrito.pedidos.find { it.id == dto.id }
+                            modeloServer.copy(lineas = local?.lineas ?: emptyList())
+                        }
                     }
 
                     pedidos.forEach { GestorCarrito.upsertPedido(this@ActividadHistorial, it) }

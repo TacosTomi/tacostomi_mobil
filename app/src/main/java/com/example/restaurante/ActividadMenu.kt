@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.restaurante.adapters.AdaptadorCategoria
 import com.example.restaurante.adapters.AdaptadorProducto
 import com.example.restaurante.data.CacheMenu
+import com.example.restaurante.data.GestorCarrito
 import com.example.restaurante.data.GestorSesion
 import com.example.restaurante.databinding.ActividadMenuBinding
 import com.example.restaurante.model.Categoria
@@ -31,6 +32,7 @@ class ActividadMenu : AppCompatActivity() {
         binding = ActividadMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        GestorCarrito.inicializar(this)
         setupNavigation()
         setupUI()
         cargarMenu()

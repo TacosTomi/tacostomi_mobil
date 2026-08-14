@@ -17,11 +17,10 @@ import com.example.restaurante.data.GestorSesion
 import com.example.restaurante.databinding.ActividadCarritoBinding
 import com.example.restaurante.model.OrderLine
 import com.example.restaurante.model.OrderStatus
-import com.example.restaurante.model.Pedido
 import com.example.restaurante.network.RetrofitClient
 import com.example.restaurante.network.dto.CrearPedidoRequest
-import com.example.restaurante.network.dto.aEstado
-import com.example.restaurante.network.dto.aFechaLegible
+import com.example.restaurante.network.dto.DetallePedidoDto
+import com.example.restaurante.network.dto.aModelo
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -100,11 +99,19 @@ class ActividadCarrito : AppCompatActivity() {
     }
 
     private fun enviarPedido(mesa: Int) {
-        // Las líneas (productos) solo se guardan localmente: el backend aún no
-        // tiene tabla detalle_pedidos, así que al servidor solo le mandamos el total.
         val lineas = GestorCarrito.items.map {
             OrderLine(it.producto.id, it.producto.nombre, it.cantidad, it.producto.precio, it.notas)
         }
+        
+        val detallesDto = GestorCarrito.items.map {
+            DetallePedidoDto(
+                platilloId = it.producto.id,
+                cantidad = it.cantidad,
+                precioUnitario = it.producto.precio,
+                notas = it.notas
+            )
+        }
+
         val total = GestorCarrito.total()
         val fechaHoraServidor = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
 
@@ -120,20 +127,14 @@ class ActividadCarrito : AppCompatActivity() {
                         meseroId = MESERO_ID_POR_DEFECTO,
                         estado = OrderStatus.RECIBIDO.name,
                         total = total,
-                        fechaHora = fechaHoraServidor
+                        fechaHora = fechaHoraServidor,
+                        detalles = detallesDto
                     )
                 )
 
                 if (respuesta.isSuccessful && respuesta.body()?.exito == true) {
                     val dto = respuesta.body()!!.data!!
-                    val pedido = Pedido(
-                        id = dto.id,
-                        fecha = dto.fechaHora.aFechaLegible(),
-                        mesa = dto.mesaId,
-                        lineas = lineas,
-                        estado = dto.aEstado(),
-                        totalServidor = dto.total
-                    )
+                    val pedido = dto.aModelo().copy(lineas = lineas)
                     GestorCarrito.upsertPedido(this@ActividadCarrito, pedido)
                     GestorCarrito.limpiar(this@ActividadCarrito)
                     actualizarResumen()

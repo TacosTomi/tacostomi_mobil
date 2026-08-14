@@ -8,9 +8,13 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.restaurante.data.GestorCarrito
 import com.example.restaurante.data.GestorSesion
 import com.example.restaurante.databinding.ActividadPerfilBinding
+import com.example.restaurante.network.RetrofitClient
+import com.example.restaurante.network.dto.CambioPasswordRequest
+import kotlinx.coroutines.launch
 
 class ActividadPerfil : AppCompatActivity() {
 
@@ -28,7 +32,6 @@ class ActividadPerfil : AppCompatActivity() {
     private fun setupUI() {
         pintarDatos()
 
-        binding.btnEditarNombre.setOnClickListener { dialogoEditarNombre() }
         binding.btnCambiarPass.setOnClickListener { dialogoCambiarPassword() }
 
         binding.btnCerrarSesion.setOnClickListener {
@@ -48,31 +51,6 @@ class ActividadPerfil : AppCompatActivity() {
         binding.tvResumen.text = "Pedidos realizados: $totalPedidos\nÚltima visita: $ultimaVisita"
     }
 
-    private fun dialogoEditarNombre() {
-        val input = EditText(this).apply {
-            setText(GestorSesion.nombre)
-            hint = "Nombre completo"
-        }
-        val contenedor = LinearLayout(this).apply {
-            setPadding(48, 16, 48, 0)
-            addView(input, LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
-        }
-        AlertDialog.Builder(this)
-            .setTitle("Editar nombre")
-            .setView(contenedor)
-            .setPositiveButton("Guardar") { _, _ ->
-                val nuevo = input.text.toString().trim()
-                if (nuevo.isNotBlank()) {
-                    GestorSesion.nombre = nuevo
-                    pintarDatos()
-                    Toast.makeText(this, "Nombre actualizado", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
-    }
-
     private fun dialogoCambiarPassword() {
         val etActual = EditText(this).apply {
             hint = "Contraseña actual"
@@ -82,22 +60,53 @@ class ActividadPerfil : AppCompatActivity() {
             hint = "Nueva contraseña (mín. 6)"
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
+        val etConfirmar = EditText(this).apply {
+            hint = "Confirmar nueva contraseña"
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
         val contenedor = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(48, 16, 48, 0)
+            setPadding(48, 16, 48, 16)
             addView(etActual)
             addView(etNueva)
+            addView(etConfirmar)
         }
         AlertDialog.Builder(this)
             .setTitle("Cambiar contraseña")
             .setView(contenedor)
             .setPositiveButton("Guardar") { _, _ ->
-                // TODO: falta un endpoint en la API (ej. PUT /usuario/password) para poder
-                // cambiar la contraseña de verdad contra el backend. Por ahora solo se avisa.
-                Toast.makeText(this, "Esta función aún no está conectada al servidor", Toast.LENGTH_LONG).show()
+                val actual = etActual.text.toString()
+                val nueva = etNueva.text.toString()
+                val confirmar = etConfirmar.text.toString()
+
+                if (actual.isBlank() || nueva.length < 6 || nueva != confirmar) {
+                    Toast.makeText(this, "Verifica los datos ingresados", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+
+                ejecutarCambioPassword(actual, nueva, confirmar)
             }
             .setNegativeButton("Cancelar", null)
             .show()
+    }
+
+    private fun ejecutarCambioPassword(actual: String, nueva: String, confirmar: String) {
+        lifecycleScope.launch {
+            try {
+                val respuesta = RetrofitClient.api.cambiarPassword(
+                    CambioPasswordRequest(actual, nueva, confirmar)
+                )
+
+                if (respuesta.isSuccessful && respuesta.body()?.exito == true) {
+                    Toast.makeText(this@ActividadPerfil, "Contraseña actualizada con éxito", Toast.LENGTH_SHORT).show()
+                } else {
+                    val msg = respuesta.body()?.mensaje ?: "No se pudo cambiar la contraseña"
+                    Toast.makeText(this@ActividadPerfil, msg, Toast.LENGTH_LONG).show()
+                }
+            } catch (_: Exception) {
+                Toast.makeText(this@ActividadPerfil, "Error de conexión", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setupNavigation() {

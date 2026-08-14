@@ -20,6 +20,7 @@ class ActividadDetallePedido : AppCompatActivity() {
         binding = ActividadDetallePedidoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        GestorCarrito.inicializar(this)
         val pedido = GestorCarrito.pedidos.find { it.id == intent.getIntExtra("pedidoId", -1) }
         if (pedido == null) { finish(); return }
 

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.restaurante.data.GestorCarrito
 import com.example.restaurante.data.GestorSesion
 import com.example.restaurante.data.ResultadoLogin
 import com.example.restaurante.databinding.ActividadIniciarSesionBinding
@@ -22,6 +23,7 @@ class ActividadIniciarSesion : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         GestorSesion.inicializar(this)
+        GestorCarrito.inicializar(this)
         if (GestorSesion.sesionActiva) {
             startActivity(Intent(this, ActividadMenu::class.java))
             finish()

@@ -9,7 +9,15 @@ data class PedidoDto(
     @SerializedName("mesero_id") val meseroId: Int,
     val estado: String,
     val total: Double,
-    @SerializedName("fecha_hora") val fechaHora: String
+    @SerializedName("fecha_hora") val fechaHora: String,
+    val detalles: List<DetallePedidoDto>? = null
+)
+
+data class DetallePedidoDto(
+    @SerializedName("platillo_id") val platilloId: Int,
+    val cantidad: Int,
+    @SerializedName("precio_unitario") val precioUnitario: Double,
+    val notas: String? = null
 )
 
 data class CrearPedidoRequest(
@@ -18,5 +26,6 @@ data class CrearPedidoRequest(
     @SerializedName("mesero_id") val meseroId: Int,
     val estado: String,
     val total: Double,
-    @SerializedName("fecha_hora") val fechaHora: String
+    @SerializedName("fecha_hora") val fechaHora: String,
+    val detalles: List<DetallePedidoDto>
 )

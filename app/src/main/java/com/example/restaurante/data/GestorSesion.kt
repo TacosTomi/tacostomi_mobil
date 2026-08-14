@@ -54,13 +54,14 @@ object GestorSesion {
 
             if (respuesta.isSuccessful && respuesta.body()?.exito == true) {
                 val data = respuesta.body()!!.data!!
-                token = data.token
-                id = data.usuario.id
-                nombre = data.usuario.nombre
-                correo = data.usuario.correo
-                rolId = data.usuario.rolId
-                sesionActiva = true
-                guardarSesion(context)
+                setSesion(
+                    context,
+                    data.token,
+                    data.usuario.id,
+                    data.usuario.nombre,
+                    data.usuario.correo,
+                    data.usuario.rolId
+                )
                 ResultadoLogin.Exito(nombre)
             } else {
                 val mensaje = respuesta.body()?.mensaje ?: "Credenciales incorrectas"
@@ -71,7 +72,17 @@ object GestorSesion {
         }
     }
 
-    private fun guardarSesion(context: Context) {
+    fun setSesion(context: Context, nuevoToken: String, nuevoId: Int, nuevoNombre: String, nuevoCorreo: String, nuevoRolId: Int = 2) {
+        token = nuevoToken
+        id = nuevoId
+        nombre = nuevoNombre
+        correo = nuevoCorreo
+        rolId = nuevoRolId
+        sesionActiva = true
+        guardarSesion(context)
+    }
+
+    fun guardarSesion(context: Context) {
         getPrefs(context).edit()
             .putString(KEY_TOKEN, token)
             .putInt(KEY_ID, id)
