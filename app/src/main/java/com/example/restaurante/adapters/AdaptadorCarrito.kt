@@ -13,6 +13,10 @@ class AdaptadorCarrito(
     private val onCambio: () -> Unit
 ) : RecyclerView.Adapter<AdaptadorCarrito.VH>() {
 
+    companion object {
+        private const val CANTIDAD_MAXIMA = 20
+    }
+
     inner class VH(val b: ItemCarritoBinding) : RecyclerView.ViewHolder(b.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH =
@@ -35,8 +39,10 @@ class AdaptadorCarrito(
         }
 
         holder.b.btnMas.setOnClickListener {
-            item.cantidad++
-            onCambio()
+            if (item.cantidad < CANTIDAD_MAXIMA) {
+                item.cantidad++
+                onCambio()
+            }
         }
         holder.b.btnMenos.setOnClickListener {
             if (item.cantidad > 1) item.cantidad--
