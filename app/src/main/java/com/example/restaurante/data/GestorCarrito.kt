@@ -41,6 +41,7 @@ object GestorCarrito {
                 prodObj.getInt("categoriaId"),
                 prodObj.getDouble("precio"),
                 prodObj.getString("emoji"),
+                if (prodObj.has("imagenUrl") && !prodObj.isNull("imagenUrl")) prodObj.getString("imagenUrl") else null,
                 prodObj.optBoolean("disponible", true)
             )
             items.add(ArticuloCarrito(producto, obj.getInt("cantidad"), obj.getString("notas")))
@@ -88,6 +89,7 @@ object GestorCarrito {
                 put("categoriaId", item.producto.categoriaId)
                 put("precio", item.producto.precio)
                 put("emoji", item.producto.emoji)
+                put("imagenUrl", item.producto.imagenUrl)
                 put("disponible", item.producto.disponible)
             }
             val obj = JSONObject().apply {

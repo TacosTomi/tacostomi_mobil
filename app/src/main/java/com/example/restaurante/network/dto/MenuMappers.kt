@@ -16,6 +16,7 @@ fun PlatilloDto.toModel(): Producto = Producto(
     categoriaId = categoriaId,
     precio = precio,
     emoji = "🌮",
+    imagenUrl = imagenUrl,
     disponible = activo
 )
 

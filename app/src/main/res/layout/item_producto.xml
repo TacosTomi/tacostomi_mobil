@@ -15,15 +15,26 @@
         android:orientation="vertical"
         android:padding="14dp">
 
-        <TextView
-            android:id="@+id/tvEmoji"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_emoji"
-            android:gravity="center"
-            android:paddingVertical="14dp"
-            android:text="🍽️"
-            android:textSize="40sp" />
+            android:layout_height="120dp"
+            android:background="@drawable/bg_emoji">
+
+            <ImageView
+                android:id="@+id/ivProducto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvEmoji"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="🌮"
+                android:textSize="40sp" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tvNombre"

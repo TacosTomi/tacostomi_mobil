@@ -13,6 +13,7 @@ data class Producto(
     val categoriaId: Int,
     val precio: Double,
     val emoji: String,
+    val imagenUrl: String? = null,
     val disponible: Boolean = true
 )
 

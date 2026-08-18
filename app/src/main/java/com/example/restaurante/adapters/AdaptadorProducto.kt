@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.restaurante.databinding.ItemProductoBinding
 import com.example.restaurante.model.Producto
 import java.util.Locale
@@ -27,7 +28,20 @@ class AdaptadorProducto(
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val p = productos[position]
-        holder.b.tvEmoji.text = p.emoji
+        
+        if (!p.imagenUrl.isNullOrBlank()) {
+            holder.b.ivProducto.visibility = View.VISIBLE
+            holder.b.tvEmoji.visibility = View.GONE
+            Glide.with(holder.itemView.context)
+                .load(p.imagenUrl)
+                .centerCrop()
+                .into(holder.b.ivProducto)
+        } else {
+            holder.b.ivProducto.visibility = View.GONE
+            holder.b.tvEmoji.visibility = View.VISIBLE
+            holder.b.tvEmoji.text = p.emoji
+        }
+
         holder.b.tvNombre.text = p.nombre
         holder.b.tvDescripcion.text = p.descripcion
         holder.b.tvPrecio.text = String.format(Locale.getDefault(), "$%.2f", p.precio)

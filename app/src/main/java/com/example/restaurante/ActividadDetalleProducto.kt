@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.restaurante.data.GestorCarrito
 import com.example.restaurante.data.CacheMenu
 import com.example.restaurante.databinding.ActividadDetalleProductoBinding
@@ -23,7 +24,19 @@ class ActividadDetalleProducto : AppCompatActivity() {
         val producto = CacheMenu.productoPorId(intent.getIntExtra("productoId", -1))
         if (producto == null) { finish(); return }
 
-        binding.tvEmoji.text = producto.emoji
+        if (!producto.imagenUrl.isNullOrBlank()) {
+            binding.ivProducto.visibility = View.VISIBLE
+            binding.tvEmoji.visibility = View.GONE
+            Glide.with(this)
+                .load(producto.imagenUrl)
+                .centerCrop()
+                .into(binding.ivProducto)
+        } else {
+            binding.ivProducto.visibility = View.GONE
+            binding.tvEmoji.visibility = View.VISIBLE
+            binding.tvEmoji.text = producto.emoji
+        }
+        
         binding.tvNombre.text = producto.nombre
         binding.tvPrecio.text = String.format(Locale.getDefault(), "$%.2f", producto.precio)
         binding.tvDescripcion.text = producto.descripcion
