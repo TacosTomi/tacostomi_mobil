@@ -1,6 +1,7 @@
 package com.example.restaurante
 
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -36,11 +37,22 @@ class ActividadDetalleProducto : AppCompatActivity() {
             binding.tvEmoji.visibility = View.VISIBLE
             binding.tvEmoji.text = producto.emoji
         }
-        
+
         binding.tvNombre.text = producto.nombre
         binding.tvPrecio.text = String.format(Locale.getDefault(), "$%.2f", producto.precio)
         binding.tvDescripcion.text = producto.descripcion
         binding.tvCantidad.text = cantidad.toString()
+
+        // Solo letras (con acentos), números, espacios y puntuación básica.
+        // Bloquea emojis y otros símbolos mientras el usuario escribe.
+        val puntuacionPermitida = setOf('.', ',', '-', '(', ')', '¿', '?', '¡', '!', '\'', ':')
+        val filtroCaracteres = InputFilter { source, start, end, _, _, _ ->
+            val filtrado = source.substring(start, end).filter {
+                it.isLetterOrDigit() || it.isWhitespace() || it in puntuacionPermitida
+            }
+            if (filtrado.length == end - start) null else filtrado
+        }
+        binding.etNotas.filters = arrayOf(filtroCaracteres, InputFilter.LengthFilter(120))
 
         if (!producto.disponible) {
             binding.tvAgotado.visibility = View.VISIBLE

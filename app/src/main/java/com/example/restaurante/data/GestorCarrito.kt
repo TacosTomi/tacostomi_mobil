@@ -133,14 +133,15 @@ object GestorCarrito {
     fun agregar(context: Context, producto: Producto, cantidad: Int, notas: String) {
         val existente = items.find { it.producto.id == producto.id && it.notas == notas }
         if (existente != null) {
-            // Límite acumulado de 50 unidades por el mismo tipo de platillo/nota
-            if (existente.cantidad + cantidad <= 50) {
+            // Límite acumulado de 20 unidades por el mismo tipo de platillo/nota,
+            // consistente con el máximo permitido en el detalle del producto y en el carrito.
+            if (existente.cantidad + cantidad <= 20) {
                 existente.cantidad += cantidad
             } else {
-                existente.cantidad = 50
+                existente.cantidad = 20
             }
         } else {
-            items.add(ArticuloCarrito(producto, cantidad, notas))
+            items.add(ArticuloCarrito(producto, cantidad.coerceAtMost(20), notas))
         }
         guardarCarrito(context)
     }
