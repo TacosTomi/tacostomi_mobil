@@ -10,9 +10,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
 
 
-    //  Remplazar por la URL pública de ngrok cada vez que se reinicie el túnel.
-    // Ejemplo: "https://algo-random.ngrok-free.app/api/"
-    private const val BASE_URL = "https://luxuriant-lorenza-girlish.ngrok-free.dev/api/"
+    //AQUI VA LA URL DE RENDER
+    private const val BASE_URL = "https://tacostomi-backend.onrender.com/api/"
 
     private val authInterceptor = Interceptor { chain ->
         val requestBuilder = chain.request().newBuilder()

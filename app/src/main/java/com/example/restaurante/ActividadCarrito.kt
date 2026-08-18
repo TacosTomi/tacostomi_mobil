@@ -21,6 +21,7 @@ import com.example.restaurante.network.RetrofitClient
 import com.example.restaurante.network.dto.CrearPedidoRequest
 import com.example.restaurante.network.dto.DetallePedidoDto
 import com.example.restaurante.network.dto.aModelo
+import com.example.restaurante.network.dto.aValorBackend
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -35,7 +36,7 @@ class ActividadCarrito : AppCompatActivity() {
         // TODO: ajustar al id real de un mesero que exista en tu tabla `meseros`.
         // La app todavía no tiene flujo para que el cliente elija mesero (el pedido
         // se hace directo desde su celular), así que se asigna este por defecto.
-        private const val MESERO_ID_POR_DEFECTO = 1
+        private const val MESERO_ID_POR_DEFECTO = 5
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,7 +103,7 @@ class ActividadCarrito : AppCompatActivity() {
         val lineas = GestorCarrito.items.map {
             OrderLine(it.producto.id, it.producto.nombre, it.cantidad, it.producto.precio, it.notas)
         }
-        
+
         val detallesDto = GestorCarrito.items.map {
             DetallePedidoDto(
                 platilloId = it.producto.id,
@@ -125,7 +126,7 @@ class ActividadCarrito : AppCompatActivity() {
                         mesaId = mesa,
                         clienteId = GestorSesion.id,
                         meseroId = MESERO_ID_POR_DEFECTO,
-                        estado = OrderStatus.RECIBIDO.name,
+                        estado = OrderStatus.RECIBIDO.aValorBackend(),
                         total = total,
                         fechaHora = fechaHoraServidor,
                         detalles = detallesDto

@@ -28,12 +28,31 @@ fun String.aFechaLegible(): String {
     return this
 }
 
-fun PedidoDto.aEstado(): OrderStatus =
-    try {
-        OrderStatus.valueOf(estado)
-    } catch (e: Exception) {
-        OrderStatus.RECIBIDO
-    }
+fun PedidoDto.aEstado(): OrderStatus = estado.aOrderStatus()
+
+/**
+ * El enum `estado_pedido` en Postgres usa valores distintos a los nombres
+ * del enum de Kotlin: minúsculas, con acento y espacio en "en preparación",
+ * y sin un valor para "cancelado". Estas funciones traducen entre ambos.
+ */
+fun OrderStatus.aValorBackend(): String = when (this) {
+    OrderStatus.RECIBIDO -> "recibido"
+    OrderStatus.EN_PREPARACION -> "en preparación"
+    OrderStatus.LISTO -> "listo"
+    OrderStatus.COMPLETADO -> "entregado"
+    // El enum de Postgres no tiene un valor para "cancelado" todavía.
+    // Se manda "recibido" como fallback para no romper la petición; hay que
+    // decidir con el equipo si se agrega "cancelado" al enum del backend.
+    OrderStatus.CANCELADO -> "recibido"
+}
+
+fun String.aOrderStatus(): OrderStatus = when (this.lowercase()) {
+    "recibido" -> OrderStatus.RECIBIDO
+    "en preparación", "en preparacion" -> OrderStatus.EN_PREPARACION
+    "listo" -> OrderStatus.LISTO
+    "entregado" -> OrderStatus.COMPLETADO
+    else -> OrderStatus.RECIBIDO
+}
 
 fun DetallePedidoDto.aModelo(): OrderLine {
     val producto = com.example.restaurante.data.CacheMenu.productoPorId(platilloId)

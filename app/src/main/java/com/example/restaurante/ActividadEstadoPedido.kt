@@ -1,5 +1,6 @@
 package com.example.restaurante
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.widget.TextView
@@ -47,7 +48,10 @@ class ActividadEstadoPedido : AppCompatActivity() {
         pintarEstado(p.estado)
         sondearEstado(p.id)
 
-        binding.btnVolver.setOnClickListener { finish() }
+        binding.btnVolver.setOnClickListener {
+            startActivity(Intent(this, ActividadMenu::class.java))
+            finish()
+        }
     }
 
     /**
